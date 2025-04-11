@@ -1,37 +1,41 @@
-name: Testes Cypress automáticos
+name: Run Cypress on Dispatch
 
 on:
   repository_dispatch:
-    types: [deploy_finalizado]
+    types: [run-tests]
 
 jobs:
-  cypress-run:
+  cypress:
     runs-on: ubuntu-latest
 
-    env:
-      CYPRESS_baseUrl: ${{ github.event.client_payload.env_url }}
-
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Instalar dependências
+      - name: Install dependencies
         run: npm ci
 
-      - name: Rodar testes Cypress
+      - name: Verify Cypress install
+        run: npx cypress verify
+
+      - name: Run Cypress tests (Chrome headless)
         run: npx cypress run --browser chrome
 
-      - name: Upload de screenshots e vídeos (se falhar)
+      - name: Upload screenshots (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-            name: cypress-artifacts
-            path: |
-                cypress/screenshots
-                cypress/videos
-      
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload videos (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos
