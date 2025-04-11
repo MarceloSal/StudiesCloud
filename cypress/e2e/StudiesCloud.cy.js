@@ -1,5 +1,7 @@
 describe('template spec', () => {
   it('passes', () => {
-    cy.visit('https://example.cypress.io')
+    cy.visit('https://marcelosal.github.io/tennis-school/')
+    cy.get('.title h1 span')
+      .should('have.text', 'Tennis School')
   })
 })
