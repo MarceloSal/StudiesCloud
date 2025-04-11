@@ -28,9 +28,10 @@ jobs:
 
       - name: Upload de screenshots e vídeos (se falhar)
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: cypress-artifacts
-          path: |
-            cypress/screenshots
-            cypress/videos
+            name: cypress-artifacts
+            path: |
+                cypress/screenshots
+                cypress/videos
+      
